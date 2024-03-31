@@ -60,7 +60,7 @@ export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placehol
             if (result.reason === ResultReason.RecognizedSpeech) {
                 setQuestion(result.text);
                 setPlaceholder(placeholder);
-                sendQuestion();
+                //sendQuestion();
             } else {
                 console.warn(`Speech to text cancelled:  ${result.reason}:  ${result.errorDetails}:  ${result}`);
                 setPlaceholder(`Speech to text cancelled:  ${result.reason}`);
