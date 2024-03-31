@@ -14,7 +14,8 @@ interface Props {
 }
 
 export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placeholder, clearOnSend }: Props) => {
-    const [question, setQuestion] = useState<string>("");
+    const [listening, setListening] = useState<boolean>(false);
+    const [question,  setQuestion]  = useState<string> ("");
 
     const sendQuestion = () => {
         if (disabled || !question.trim()) {
@@ -32,6 +33,8 @@ export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placehol
         if (speechToTextDisabled) {
             return;
         }
+
+        setListening(true)
 
         const tokenObj = await getTokenOrRefresh();
         const speechConfig = SpeechConfig.fromAuthorizationToken(tokenObj.authToken, tokenObj.region);
@@ -63,6 +66,8 @@ export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placehol
                 //setQuestion(displayText);
             }
             setQuestion(displayText);
+
+            setListening(false)
         });
     };
 
@@ -104,7 +109,7 @@ export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placehol
                     <Send28Filled primaryFill="rgba(115, 118, 225, 1)" />
                 </div>
                 <div
-                    className={`${styles.questionInputSendButton} ${speechToTextDisabled ? styles.questionInputSendButtonDisabled : ""}`}
+                    className={`${styles.questionInputSendButton} ${speechToTextDisabled || listening ? styles.questionInputSendButtonDisabled : ""}`}
                     aria-label="Boton hablar"
                     onClick={sttFromMic}
                 >
