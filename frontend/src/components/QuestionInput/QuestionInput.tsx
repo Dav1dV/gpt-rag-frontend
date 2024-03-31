@@ -62,7 +62,8 @@ export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placehol
                 setPlaceholder(placeholder);
                 sendQuestion();
             } else {
-                setPlaceholder('ERROR: Voice recognition was canceled or the voice cannot be recognized. Make sure your microphone is working properly.');
+                console.warn(`Speech to text cancelled:  ${result.reason}:  ${result.errorDetails}:  ${result}`);
+                setPlaceholder(`Speech to text cancelled:  ${result.reason}`);
             }
 
             setListening(false)
