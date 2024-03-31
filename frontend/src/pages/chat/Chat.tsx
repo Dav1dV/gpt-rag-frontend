@@ -26,7 +26,7 @@ if (userLanguage.startsWith("pt")) {
 }
 
 const Chat = () => {
-    const speechToTextDisabled = false;
+    const speechToTextDisabled = true;
 
     // speech synthesis is disabled by default
     const speechSynthesisEnabled = false;
