@@ -26,6 +26,8 @@ if (userLanguage.startsWith("pt")) {
 }
 
 const Chat = () => {
+    const speechToTextDisabled = false;
+
     // speech synthesis is disabled by default
     const speechSynthesisEnabled = false;
 
@@ -297,7 +299,7 @@ const Chat = () => {
                     )}
 
                     <div className={styles.chatInput}>
-                        <QuestionInput clearOnSend placeholder={placeholderText} disabled={isLoading} onSend={question => makeApiRequestGpt(question)} />
+                        <QuestionInput clearOnSend placeholder={placeholderText} disabled={isLoading} speechToTextDisabled={speechToTextDisabled} onSend={question => makeApiRequestGpt(question)} />
                     </div>
                 </div>
 

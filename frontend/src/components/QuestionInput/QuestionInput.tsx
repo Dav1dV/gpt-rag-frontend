@@ -8,11 +8,12 @@ import styles from "./QuestionInput.module.css";
 interface Props {
     onSend: (question: string) => void;
     disabled: boolean;
+    speechToTextDisabled: boolean;
     placeholder?: string;
     clearOnSend?: boolean;
 }
 
-export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Props) => {
+export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placeholder, clearOnSend }: Props) => {
     const [question, setQuestion] = useState<string>("");
 
     const sendQuestion = () => {
@@ -28,6 +29,10 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Pr
     };
 
     const sttFromMic = async () => {
+        if (speechToTextDisabled) {
+            return;
+        }
+
         const tokenObj = await getTokenOrRefresh();
         const speechConfig = SpeechConfig.fromAuthorizationToken(tokenObj.authToken, tokenObj.region);
         speechConfig.speechRecognitionLanguage = tokenObj.speechRecognitionLanguage;
@@ -99,7 +104,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Pr
                     <Send28Filled primaryFill="rgba(115, 118, 225, 1)" />
                 </div>
                 <div
-                    className={`${styles.questionInputSendButton}}`}
+                    className={`${styles.questionInputSendButton} ${speechToTextDisabled ? styles.questionInputSendButtonDisabled : ""}`}
                     aria-label="Boton hablar"
                     onClick={sttFromMic}
                 >
