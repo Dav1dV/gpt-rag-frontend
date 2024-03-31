@@ -101,7 +101,7 @@ const Chat = () => {
                         if (result.reason === ResultReason.SynthesizingAudioCompleted) {
                             console.log("synthesis finished.");
                         } else {
-                            console.error("Speech synthesis canceled, " + result.errorDetails + "\nDid you update the subscription info?");
+                            console.warn(`Speech synthesis cancelled:  ${result.reason}:  ${result.errorDetails}:  ${result}`);
                         }
                         synthesizer.close();
                     },
