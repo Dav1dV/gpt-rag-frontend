@@ -42,7 +42,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend }: Pr
         } else if (userLanguage.startsWith('es')) {
           reiniciar_text = 'Puedes hablar usando su micrófono...';
         } else {
-          reiniciar_text = 'You can talk using your microphone...';
+          reiniciar_text = 'Speak a question or other prompt.  Listening ...';
         }
 
         setQuestion(reiniciar_text);
