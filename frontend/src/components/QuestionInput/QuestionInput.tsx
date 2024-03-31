@@ -60,7 +60,7 @@ export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placehol
             if (result.reason === ResultReason.RecognizedSpeech) {
                 setQuestion(result.text);
                 setPlaceholder(placeholder);
-                //onSend(question);
+                sendQuestion();
             } else {
                 setPlaceholder('ERROR: Voice recognition was canceled or the voice cannot be recognized. Make sure your microphone is working properly.');
             }
