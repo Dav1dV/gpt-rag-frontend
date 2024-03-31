@@ -13,9 +13,10 @@ interface Props {
     clearOnSend?: boolean;
 }
 
-export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placeholder, clearOnSend }: Props) => {
-    const [listening, setListening] = useState<boolean>(false);
-    const [question,  setQuestion]  = useState<string> ("");
+export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placeholder = "", clearOnSend }: Props) => {
+    const [currPlaceholder, setPlaceholder] = useState<string> (placeholder);
+    const [listening,       setListening]   = useState<boolean>(false);
+    const [question,        setQuestion]    = useState<string> ("");
 
     const sendQuestion = () => {
         if (disabled || !question.trim()) {
@@ -53,19 +54,16 @@ export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placehol
           reiniciar_text = 'Speak a question or other prompt.  Listening ...';
         }
 
-        setQuestion(reiniciar_text);
+        setPlaceholder(reiniciar_text);
 
         recognizer.recognizeOnceAsync(result => {
-            let displayText;
             if (result.reason === ResultReason.RecognizedSpeech) {
-                displayText = result.text;
-                //setQuestion(displayText);
+                setQuestion(result.text);
+                setPlaceholder(placeholder);
                 //onSend(question);
             } else {
-                displayText = 'ERROR: Voice recognition was canceled or the voice cannot be recognized. Make sure your microphone is working properly.';
-                //setQuestion(displayText);
+                setPlaceholder('ERROR: Voice recognition was canceled or the voice cannot be recognized. Make sure your microphone is working properly.');
             }
-            setQuestion(displayText);
 
             setListening(false)
         });
@@ -84,6 +82,10 @@ export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placehol
         } else if (newValue.length <= 1000) {
             setQuestion(newValue);
         }
+
+        if (currPlaceholder != placeholder) {
+            setPlaceholder(placeholder);
+        }
     };
 
     const sendQuestionDisabled = disabled || !question.trim();
@@ -92,7 +94,7 @@ export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placehol
         <Stack horizontal className={styles.questionInputContainer}>
             <TextField
                 className={styles.questionInputTextArea}
-                placeholder={placeholder}
+                placeholder={currPlaceholder}
                 multiline
                 resizable={false}
                 borderless
