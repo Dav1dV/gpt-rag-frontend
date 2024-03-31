@@ -167,7 +167,7 @@ const Chat = () => {
         if (language.startsWith("es")) {
             setPlaceholderText("Escribe tu pregunta aqui");
         } else {
-            setPlaceholderText("Write your question here");
+            setPlaceholderText("Enter a question or other prompt here");
         }
     }, [isLoading]);
 
