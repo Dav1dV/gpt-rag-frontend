@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Stack, TextField } from "@fluentui/react";
 import { getTokenOrRefresh } from './token_util';
 import { Send28Filled, BookOpenMicrophone28Filled, SlideMicrophone32Filled } from "@fluentui/react-icons";
-import { ResultReason, SpeechConfig, AudioConfig, SpeechRecognizer } from 'microsoft-cognitiveservices-speech-sdk';
+import { ResultReason, CancellationDetails, CancellationReason, SpeechConfig, AudioConfig, SpeechRecognizer } from 'microsoft-cognitiveservices-speech-sdk';
 
 import styles from "./QuestionInput.module.css";
 interface Props {
@@ -57,13 +57,28 @@ export const QuestionInput = ({ onSend, disabled, speechToTextDisabled, placehol
         setPlaceholder(reiniciar_text);
 
         recognizer.recognizeOnceAsync(result => {
-            if (result.reason === ResultReason.RecognizedSpeech) {
-                setQuestion(result.text);
-                setPlaceholder(placeholder);
-                //sendQuestion();
-            } else {
-                console.warn(`Speech to text cancelled:  ${result.reason}:  ${result.errorDetails}:  ${result}`);
-                setPlaceholder(`Speech to text cancelled:  ${result.reason}`);
+            switch (result.reason) {
+                case ResultReason.RecognizedSpeech:
+                    setQuestion(result.text);
+                    setPlaceholder(placeholder);
+                    //sendQuestion();
+                    break;
+
+                case ResultReason.NoMatch:
+                    setPlaceholder('Speech was not recognized');
+                    break;
+
+                case ResultReason.Canceled:
+                    const cancellation = CancellationDetails.fromResult(result);
+                    console.log(`Speech to text cancelled:  Reason: ${cancellation.reason}`);
+                    setPlaceholder('Speech to text was cancelled')
+
+                    if (cancellation.reason == CancellationReason.Error)
+                        console.error(`Speech to text cancelled upon error:  Code: ${cancellation.ErrorCode}:  Details: ${cancellation.errorDetails}:  Are the speech resource key and region values set?`);
+
+                default:
+                    console.log(`Speech to text cancelled:  Reason: ${result.reason}:  Error Details: ${result.errorDetails}:  Result: ${result}`);
+                    setPlaceholder('Speech to text was cancelled')
             }
 
             setListening(false)
